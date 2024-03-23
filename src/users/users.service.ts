@@ -45,6 +45,15 @@ export class UsersService {
       message: 'Fetched User',
     };
   }
+  async findByEmail(email: string): Promise<Message<Partial<User>>> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    return {
+      data: user,
+      message: 'Fetched User',
+    };
+  }
 
   async update(
     id: string,

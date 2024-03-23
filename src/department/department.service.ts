@@ -13,9 +13,10 @@ export class DepartmentService {
   }
   async create(
     createDepartmentDto: CreateDepartmentDto,
+    creatorId: string,
   ): Promise<Message<Department>> {
     const createdDepartment = await this.prisma.department.create({
-      data: { ...createDepartmentDto, creatorId: 'abc' },
+      data: { ...createDepartmentDto, creatorId },
     });
     return {
       data: createdDepartment,
