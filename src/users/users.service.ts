@@ -15,9 +15,12 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<Message<Partial<User>>> {
     const { hash, salt } = this.utilService.hash(createUserDto.password);
     delete createUserDto.password;
-    const createdUser = await this.prisma.user.create({
+    const {
+      hash: h,
+      hash: s,
+      ...createdUser
+    } = await this.prisma.user.create({
       data: { ...createUserDto, hash, salt, status: 'ACTIVE' },
-      select: { salt: false, hash: false },
     });
     return {
       data: createdUser,
@@ -27,7 +30,7 @@ export class UsersService {
 
   async findAll(): Promise<Message<Partial<User>[]>> {
     const users = await this.prisma.user.findMany({
-      select: { salt: false, hash: false },
+      select: { email: true, fullName: true, id: true, status: true },
     });
     return {
       data: users,
@@ -36,9 +39,8 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<Message<Partial<User>>> {
-    const user = await this.prisma.user.findUnique({
+    const { hash, salt, ...user } = await this.prisma.user.findUnique({
       where: { id },
-      select: { hash: false, salt: false },
     });
     return {
       data: user,
@@ -60,10 +62,9 @@ export class UsersService {
     updateUserDto: UpdateUserDto,
   ): Promise<Message<Partial<User>>> {
     delete updateUserDto.password;
-    const updatedUser = await this.prisma.user.update({
+    const { hash, salt, ...updatedUser } = await this.prisma.user.update({
       data: updateUserDto,
       where: { id },
-      select: { hash: false, salt: false },
     });
     return {
       data: updatedUser,

@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 import { SecurityConfigProps } from 'src/interfaces/config.interface';
 import { UsersService } from 'src/users/users.service';
 
@@ -27,7 +28,7 @@ export class AuthGuard implements CanActivate {
         secret:
           this.configService.get<SecurityConfigProps>('security').jwtSecrete,
       });
-      const user = await this.userService.findOne(request['user'].sub);
+      const user = await this.userService.findOne(payload.sub);
       if (!user.data || user.data.status !== 'ACTIVE') {
         throw new UnauthorizedException();
       }
@@ -38,8 +39,7 @@ export class AuthGuard implements CanActivate {
     return true;
   }
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] =
-      request.headers.get('authorization')?.split(' ') ?? [];
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }

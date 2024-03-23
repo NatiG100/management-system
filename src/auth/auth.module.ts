@@ -13,6 +13,7 @@ import { SecurityConfigProps } from 'src/interfaces/config.interface';
     UsersModule,
     ConfigModule,
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<SecurityConfigProps>('security').jwtSecrete,
