@@ -9,8 +9,8 @@ This is a simple Organizational structure management system
 
 ## Configuration
 
-- create .env file in the root folder
-- add config entries according to the file sample.env file
+- create <em>.env</em> file in the root folder
+- add config entries according to the file <em>sample.env</em> file
 
 ## Installation
 
