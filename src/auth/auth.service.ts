@@ -12,7 +12,10 @@ export class AuthService {
     private util: UtilService,
     private jwtService: JwtService,
   ) {}
-  async signIn(email: string, pass: string): Promise<{ access_token: string }> {
+  async signIn(
+    email: string,
+    pass: string,
+  ): Promise<Message<{ access_token: string; user: Partial<User> }>> {
     const user = await this.userService.findByEmail(email);
     const authenticUser = this.util.check(pass, user.data.hash, user.data.salt);
     if (!authenticUser) {
@@ -21,7 +24,11 @@ export class AuthService {
     const { hash, salt, ...result } = user.data;
     const payload = { sub: user.data.id, email: user.data.email };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      data: {
+        access_token: await this.jwtService.signAsync(payload),
+        user: result,
+      },
+      message: 'Successfully authenticated',
     };
   }
 }
