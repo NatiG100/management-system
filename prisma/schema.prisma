@@ -32,11 +32,11 @@ model Department{
 }
 
 model DepartmentRelation{
-  child Department @relation("relationsAsAChild",fields: [chaildId],references: [id])
+  child Department @relation("relationsAsAChild",fields: [childId],references: [id])
   parent Department @relation("relationsAsAParent",fields: [parentId], references: [id])
   parentId String
-  chaildId String
-  @@id([parentId, chaildId])
+  childId String
+  @@id([parentId, childId])
 }
 
 enum UserStatus{

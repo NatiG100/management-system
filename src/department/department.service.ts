@@ -12,11 +12,15 @@ export class DepartmentService {
     return this.prisma.department.count();
   }
   async create(
-    createDepartmentDto: CreateDepartmentDto,
+    { parentId, ...departmentInfo }: CreateDepartmentDto,
     creatorId: string,
   ): Promise<Message<Department>> {
     const createdDepartment = await this.prisma.department.create({
-      data: { ...createDepartmentDto, creatorId },
+      data: {
+        ...departmentInfo,
+        creatorId,
+        relationsAsAChild: { create: { parentId: parentId } },
+      },
     });
     return {
       data: createdDepartment,
@@ -25,7 +29,9 @@ export class DepartmentService {
   }
 
   async findAll(): Promise<Message<Department[]>> {
-    const allDepartments = await this.prisma.department.findMany();
+    const allDepartments = await this.prisma.department.findMany({
+      include: { relationsAsAChild: true, relationsAsAParent: true },
+    });
     return {
       data: allDepartments,
       message: 'List of all departments',
@@ -35,6 +41,7 @@ export class DepartmentService {
   async findOne(id: string): Promise<Message<Department>> {
     const department = await this.prisma.department.findUnique({
       where: { id: id },
+      include: { relationsAsAChild: true, relationsAsAParent: true },
     });
     return {
       data: department,
