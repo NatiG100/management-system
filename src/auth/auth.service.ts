@@ -31,4 +31,13 @@ export class AuthService {
       message: 'Successfully authenticated',
     };
   }
+  async me(userId: string): Promise<Message<Partial<User>>> {
+    const user = await this.userService.findOne(userId);
+    if (!user || user.data.status !== 'ACTIVE') {
+      throw new UnauthorizedException(
+        'Your account is inactive, please contact the admin.',
+      );
+    }
+    return user;
+  }
 }
