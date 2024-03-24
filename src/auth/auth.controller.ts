@@ -11,6 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { SigninDto } from './SigninDto';
 import { AuthGuard } from './auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -21,8 +22,9 @@ export class AuthController {
   signIn(@Body() signInDto: SigninDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
-  @UseGuards(AuthGuard)
   @Get('me')
+  @ApiBearerAuth('authorization')
+  @UseGuards(AuthGuard)
   singIn(@Request() req: Request) {
     return this.authService.me(req['user'].sub);
   }
