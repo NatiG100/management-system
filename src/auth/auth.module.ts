@@ -5,6 +5,7 @@ import { UsersModule } from 'src/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { SecurityConfigProps } from 'src/interfaces/config.interface';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Module({
   controllers: [AuthController],
