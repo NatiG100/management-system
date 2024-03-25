@@ -32,8 +32,8 @@ model Department{
 }
 
 model DepartmentRelation{
-  child Department @relation("relationsAsAChild",fields: [childId],references: [id])
-  parent Department @relation("relationsAsAParent",fields: [parentId], references: [id])
+  child Department @relation("relationsAsAChild",fields: [childId],references: [id],onDelete: Cascade)
+  parent Department @relation("relationsAsAParent",fields: [parentId], references: [id],onDelete: Cascade)
   parentId String
   childId String
   @@id([parentId, childId])

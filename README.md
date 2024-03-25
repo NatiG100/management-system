@@ -31,6 +31,10 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Documentation
+
+- go to <base-api-url>/api to view swagger doc (eg: http://localhost:4000/api)
+
 ## Test
 
 ```bash

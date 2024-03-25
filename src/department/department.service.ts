@@ -19,7 +19,9 @@ export class DepartmentService {
       data: {
         ...departmentInfo,
         creatorId,
-        relationsAsAChild: { create: { parentId: parentId } },
+        ...(parentId && {
+          relationsAsAChild: { create: { parentId: parentId } },
+        }),
       },
     });
     return {
